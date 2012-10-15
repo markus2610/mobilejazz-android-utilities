@@ -4,13 +4,29 @@ import android.util.Log;
 
 public class Debug {
 
+	private static boolean internalMethod(StackTraceElement e) {
+		return e.getClassName().startsWith("dalvik.") ||
+				e.getClassName().startsWith("java.lang.") ||
+				e.getClassName().startsWith(Debug.class.getName());
+	}
+	
 	protected static StackTraceElement getCurrentMethod() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		return stackTrace[stackTrace.length - 1]; 
+		
+		int i = 0;
+		while (internalMethod(stackTrace[i]) && i < stackTrace.length)
+			++i;
+		
+		return stackTrace[i];
+	}
+	
+	public static String getCurrentClassName() {
+		return getCurrentMethod().getClassName();
 	}
 	
 	public static String getClassTag() {
-		return getCurrentMethod().getClassName();
+		String className = getCurrentClassName();
+		return className.substring(className.lastIndexOf('.')+1);
 	}
 	
 	public static String getClassMethodTag(String delim) {
@@ -19,7 +35,7 @@ public class Debug {
 	}
 	
 	public static String getDefaultTag() {
-		return getClassMethodTag(" - ");
+		return getClassTag();
 	}
 	
 	public static void debug(String message) {
