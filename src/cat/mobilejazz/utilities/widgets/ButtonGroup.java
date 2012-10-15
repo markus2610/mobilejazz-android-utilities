@@ -24,8 +24,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-
-import com.kiwi.utils.R;
+import cat.mobilejazz.utilities.R;
 
 
 /**
