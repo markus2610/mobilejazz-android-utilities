@@ -2,13 +2,49 @@ package cat.mobilejazz.utilities;
 
 import android.util.Log;
 
-public class KDebug {
+public class Debug {
 
-	public static void logMethod() {
+	protected static StackTraceElement getCurrentMethod() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		StackTraceElement currentMethod = stackTrace[stackTrace.length - 1];
-		
-		Log.v(currentMethod.getClassName(), currentMethod.getMethodName());
+		return stackTrace[stackTrace.length - 1]; 
+	}
+	
+	public static String getClassTag() {
+		return getCurrentMethod().getClassName();
+	}
+	
+	public static String getClassMethodTag(String delim) {
+		StackTraceElement elem = getCurrentMethod();
+		return elem.getClassName() + delim + elem.getMethodName();
+	}
+	
+	public static String getDefaultTag() {
+		return getClassMethodTag(" - ");
+	}
+	
+	public static void debug(String message) {
+		Log.d(getDefaultTag(), message);
+	}
+	
+	public static void verbose(String message) {
+		Log.v(getDefaultTag(), message);
+	}
+	
+	public static void info(String message) {
+		Log.i(getDefaultTag(), message);
+	}
+	
+	public static void warning(String message) {
+		Log.w(getDefaultTag(), message);
+	}
+	
+	public static void error(String message) {
+		Log.e(getDefaultTag(), message);
+	}
+	
+	public static void logMethod() {
+		StackTraceElement elem = getCurrentMethod();
+		Log.v(elem.getClassName(), elem.getMethodName());
 	}
 	
 	public static void logMethodVerbose(Object... params) {
