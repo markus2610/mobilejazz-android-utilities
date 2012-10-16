@@ -58,6 +58,10 @@ public class Debug {
 		Log.e(getDefaultTag(), message);
 	}
 	
+	public static void logException(Throwable e) {
+		error(e.getLocalizedMessage());
+	}
+	
 	public static void logMethod() {
 		StackTraceElement elem = getCurrentMethod();
 		Log.v(elem.getClassName(), elem.getMethodName());
