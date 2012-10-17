@@ -10,15 +10,18 @@ import android.widget.BaseAdapter;
 
 public abstract class ListAdapter<T> extends BaseAdapter {
 
-	private List<T> data;
+	protected List<T> data;
+	protected Context context;
 	private int resourceId;
 	private LayoutInflater inflater;
+	
 
 	public ListAdapter(List<T> data, int resourceId, Context context) {
 		this.data = data;
 		this.resourceId = resourceId;
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.context = context;
 	}
 
 	protected abstract int getObjectId(T obj);
@@ -47,6 +50,11 @@ public abstract class ListAdapter<T> extends BaseAdapter {
 			view = inflater.inflate(resourceId, null);
 		updateView(view, data.get(position));
 		return view;
+	}
+	
+	public void updateList(List<T> newList) {
+		data = newList;
+		notifyDataSetChanged();
 	}
 
 }
