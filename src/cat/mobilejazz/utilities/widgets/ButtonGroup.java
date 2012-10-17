@@ -348,14 +348,13 @@ public class ButtonGroup extends LinearLayout {
                 return;
             }
 
+            int id = buttonView.getId();
             mProtectFromCheckedChange = true;
-            if (mCheckedId != -1) {
+            if (mCheckedId != -1 && mCheckedId != id) {
                 setCheckedStateForView(mCheckedId, false);
+                setCheckedId(id);
             }
             mProtectFromCheckedChange = false;
-
-            int id = buttonView.getId();
-            setCheckedId(id);
         }
     }
 
