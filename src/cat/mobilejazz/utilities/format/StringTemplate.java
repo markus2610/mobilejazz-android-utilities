@@ -1,5 +1,7 @@
 package cat.mobilejazz.utilities.format;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +19,7 @@ public class StringTemplate {
 	private static final Pattern pattern = Pattern
 			.compile("\\$\\{([\\.\\w]*)\\}");
 
+	private List<String> variables;
 	private String template;
 	private Matcher matcher;
 
@@ -30,6 +33,16 @@ public class StringTemplate {
 	public StringTemplate(String template) {
 		this.template = template;
 		matcher = pattern.matcher(template);
+	}
+	
+	public int getVariableIndex(String name) {
+		if (variables == null) {
+			variables = new ArrayList<String>();
+			while (matcher.find()) {
+				variables.add(matcher.group(1));
+			}
+		}
+		return variables.indexOf(name);
 	}
 
 	/**
