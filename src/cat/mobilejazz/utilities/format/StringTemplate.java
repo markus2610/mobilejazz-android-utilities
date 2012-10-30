@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
  */
 public class StringTemplate {
 
-	private static final Pattern pattern = Pattern.compile("\\$\\{([\\.\\w]*)\\}");
+	private static final Pattern pattern = Pattern
+			.compile("\\$\\{([\\.\\w]*)\\}");
 
 	private String template;
 	private Matcher matcher;
@@ -22,8 +23,9 @@ public class StringTemplate {
 	/**
 	 * Creates a string template with the given template string.
 	 * 
-	 * @param template The template string where variables are denoted
-	 * by the pattern <code>${name}</code>.
+	 * @param template
+	 *            The template string where variables are denoted by the pattern
+	 *            <code>${name}</code>.
 	 */
 	public StringTemplate(String template) {
 		this.template = template;
@@ -32,6 +34,7 @@ public class StringTemplate {
 
 	/**
 	 * Gets the template string.
+	 * 
 	 * @return the raw template string.
 	 */
 	public String getTemplate() {
@@ -39,19 +42,21 @@ public class StringTemplate {
 	}
 
 	/**
-	 * Renders the template by replacing the variable patterns with the
-	 * value of the object whose key matches the name of the variable.
-	 * @param values A {@link Map} that contains the values of the variables.
-	 * @return A {@link CharSequence} representing the rendered string
+	 * Renders the template by replacing the variable patterns with the value of
+	 * the object whose key matches the name of the variable.
+	 * 
+	 * @param values
+	 *            A {@link Map} that contains the values of the variables.
+	 * @return A {@link String} representing the rendered string
 	 */
-	public CharSequence render(Map<String, Object> values) {
+	public String render(Map<String, Object> values) {
 		StringBuffer s = new StringBuffer();
 		while (matcher.find()) {
 			String key = matcher.group(1);
 			matcher.appendReplacement(s, String.valueOf(values.get(key)));
 		}
 		matcher.appendTail(s);
-		return s;
+		return s.toString();
 	}
 
 }
