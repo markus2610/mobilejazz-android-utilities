@@ -1,4 +1,4 @@
-package cat.mobilejazz.utilities;
+package cat.mobilejazz.utilities.format;
 
 public interface ObjectPrinter<V> {
 	
