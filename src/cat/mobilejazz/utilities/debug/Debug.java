@@ -60,7 +60,10 @@ public class Debug {
 	}
 	
 	public static void logException(Throwable e) {
-		error(e.getLocalizedMessage());
+		e.printStackTrace();
+		String message = e.getLocalizedMessage();
+		if (message != null)
+			error(message);
 	}
 	
 	public static void logMethod() {
