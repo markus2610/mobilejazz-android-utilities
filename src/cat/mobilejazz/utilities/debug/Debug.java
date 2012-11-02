@@ -68,7 +68,7 @@ public class Debug {
 	
 	public static void logMethod() {
 		StackTraceElement elem = getCurrentMethod();
-		Log.v(elem.getClassName(), elem.getMethodName());
+		verbose(elem.getMethodName());
 	}
 	
 	public static void logMethodVerbose(Object... params) {
