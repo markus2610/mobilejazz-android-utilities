@@ -10,9 +10,8 @@ public class StringFormatter {
 		return b.append(INDENT_LITERAL_32, 0, num);
 	}
 	
-	public static <V> CharSequence printIterable(Iterable<V> iterable,
+	public static <V> CharSequence printIterable(StringBuilder output, Iterable<V> iterable,
 			CharSequence delimiter, ObjectPrinter<V> printer) {
-		StringBuilder output = new StringBuilder();
 		Iterator<V> i = iterable.iterator();
 		if (i.hasNext()) {
 			output.append(printer.toString(i.next()));
@@ -25,19 +24,18 @@ public class StringFormatter {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <V> CharSequence printIterable(Iterable<V> iterable,
+	public static <V> CharSequence printIterable(StringBuilder output, Iterable<V> iterable,
 			CharSequence delimiter) {
-		return printIterable(iterable, delimiter,
+		return printIterable(output, iterable, delimiter,
 				(ObjectPrinter<V>) DefaultObjectPrinter.getInstance());
 	}
 
-	public static <V> CharSequence printIterable(Iterable<V> iterable) {
-		return printIterable(iterable, ", ");
+	public static <V> CharSequence printIterable(StringBuilder output, Iterable<V> iterable) {
+		return printIterable(output, iterable, ", ");
 	}
 
-	public static <V> CharSequence printIterable(CharSequence delimiter,
+	public static <V> CharSequence printIterable(StringBuilder output, CharSequence delimiter,
 			ObjectPrinter<V> printer, V... array) {
-		StringBuilder output = new StringBuilder();
 		if (array.length > 0) {
 			output.append(printer.toString(array[0]));
 		}
@@ -49,14 +47,42 @@ public class StringFormatter {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <V> CharSequence printIterable(CharSequence delimiter,
+	public static <V> CharSequence printIterable(StringBuilder output, CharSequence delimiter,
 			V... array) {
-		return printIterable(delimiter,
+		return printIterable(output, delimiter,
 				(ObjectPrinter<V>) DefaultObjectPrinter.getInstance(), array);
 	}
 
+	public static <V> CharSequence printIterable(StringBuilder output, V... array) {
+		return printIterable(output, ", ", array);
+	}
+	
+	public static <V> CharSequence printIterable(Iterable<V> iterable,
+			CharSequence delimiter, ObjectPrinter<V> printer) {
+		return printIterable(new StringBuilder(), iterable, delimiter, printer);
+	}
+
+	public static <V> CharSequence printIterable(Iterable<V> iterable,
+			CharSequence delimiter) {
+		return printIterable(new StringBuilder(), iterable, delimiter);
+	}
+
+	public static <V> CharSequence printIterable(Iterable<V> iterable) {
+		return printIterable(new StringBuilder(), iterable);
+	}
+
+	public static <V> CharSequence printIterable(CharSequence delimiter,
+			ObjectPrinter<V> printer, V... array) {
+		return printIterable(new StringBuilder(), delimiter, printer, array);
+	}
+
+	public static <V> CharSequence printIterable(CharSequence delimiter,
+			V... array) {
+		return printIterable(new StringBuilder(), delimiter, array);
+	}
+
 	public static <V> CharSequence printIterable(V... array) {
-		return printIterable(", ", array);
+		return printIterable(new StringBuilder(), array);
 	}
 
 }
