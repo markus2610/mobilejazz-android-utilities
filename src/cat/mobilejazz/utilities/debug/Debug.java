@@ -73,21 +73,8 @@ public class Debug {
 	
 	public static void logMethodVerbose(Object... params) {
 		Log.v("KDebug", "logMethodVerbose");
-		
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-		StackTraceElement currentMethod = stackTrace[3];
-		try {
-			
-			
-			Class<?> clazz = Class.forName(currentMethod.getClassName());
-			
-			Class<?>[] methodParams = new Class<?>[params.length];
-			for (int i = 0; i < params.length; i++) {
-				if (params[i] != null)
-					methodParams[i] = params[i].getClass();
-				else
-					methodParams[i] = null;
-			}
+		StackTraceElement currentMethod = getCurrentMethod();
+		try {	
 			
 			StringBuilder verboseOutput = new StringBuilder();
 			verboseOutput.append(currentMethod.getMethodName());
@@ -100,10 +87,9 @@ public class Debug {
 			verboseOutput.append(currentMethod.getLineNumber());
 			verboseOutput.append("]");
 			
-			Log.v(currentMethod.getClassName(), verboseOutput.toString());
+			String className = currentMethod.getClassName();
+			Log.v(className.substring(className.lastIndexOf('.')+1), verboseOutput.toString());
 
-		} catch (ClassNotFoundException e) {
-			Log.v(currentMethod.getClassName(), currentMethod.getMethodName());
 		} catch (SecurityException e) {
 			Log.v(currentMethod.getClassName(), currentMethod.getMethodName());
 		}
