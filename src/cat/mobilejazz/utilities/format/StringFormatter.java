@@ -10,6 +10,26 @@ public class StringFormatter {
 		return b.append(INDENT_LITERAL_32, 0, num);
 	}
 	
+	public static CharSequence repeat(StringBuilder output, CharSequence content, CharSequence delimiter, int count) {
+		output.append(content);
+		for (int i = 1; i < count; ++i) {
+			output.append(delimiter).append(content);
+		}
+		return output;
+	}
+	
+	public static CharSequence repeat(StringBuilder output, CharSequence content, int count) {
+		return repeat(output, content, " ", count);
+	}
+	
+	public static CharSequence repeat(CharSequence content, CharSequence delimiter, int count) {
+		return repeat(new StringBuilder(), content, delimiter, count);
+	}
+	
+	public static CharSequence repeat(CharSequence content, int count) {
+		return repeat(new StringBuilder(), content, " ", count);
+	}
+	
 	public static <V> CharSequence printIterable(StringBuilder output, Iterable<V> iterable,
 			CharSequence delimiter, ObjectPrinter<V> printer) {
 		Iterator<V> i = iterable.iterator();
