@@ -3,3 +3,5 @@ gen
 *~
 .settings
 local.properties
+.classpath
+.project
