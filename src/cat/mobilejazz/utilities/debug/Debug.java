@@ -1,7 +1,7 @@
 package cat.mobilejazz.utilities.debug;
 
-import cat.mobilejazz.utilities.format.StringFormatter;
 import android.util.Log;
+import cat.mobilejazz.utilities.format.StringFormatter;
 
 public class Debug {
 
