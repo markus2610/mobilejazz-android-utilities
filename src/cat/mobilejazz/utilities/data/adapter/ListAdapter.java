@@ -1,5 +1,6 @@
 package cat.mobilejazz.utilities.data.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -14,13 +15,15 @@ public abstract class ListAdapter<T> extends BaseAdapter {
 	protected Context context;
 	private int resourceId;
 	private LayoutInflater inflater;
-	
 
 	public ListAdapter(List<T> data, int resourceId, Context context) {
-		this.data = data;
+		if (data != null) {
+			this.data = data;
+		} else {
+			this.data = new ArrayList<T>();
+		}
 		this.resourceId = resourceId;
-		this.inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.context = context;
 	}
 
@@ -51,7 +54,7 @@ public abstract class ListAdapter<T> extends BaseAdapter {
 		updateView(view, data.get(position));
 		return view;
 	}
-	
+
 	public void updateList(List<T> newList) {
 		data = newList;
 		notifyDataSetChanged();
