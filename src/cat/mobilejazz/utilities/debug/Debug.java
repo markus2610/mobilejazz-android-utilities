@@ -70,10 +70,13 @@ public class Debug {
 	}
 
 	public static void logException(Throwable e) {
-		e.printStackTrace();
-		String message = e.getLocalizedMessage();
-		if (message != null)
-			error(message);
+		if (BuildConfig.DEBUG) {
+			e.printStackTrace();
+
+			String message = e.getLocalizedMessage();
+			if (message != null)
+				error(message);
+		}
 	}
 
 	public static void logMethod() {
