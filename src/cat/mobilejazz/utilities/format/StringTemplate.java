@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * A very simple implementation of a class for rendering string templates. The
  * syntax for variables is <code>${name}</code> and values for variables are
- * passed as a map parameter to {@link #render(Map)}.
+ * passed as a symbol table parameter to {@link #render(SymbolTable)}.
  * 
  * @author Hannes Widmoser
  * 
@@ -59,14 +59,14 @@ public class StringTemplate {
 	 * the object whose key matches the name of the variable.
 	 * 
 	 * @param values
-	 *            A {@link Map} that contains the values of the variables.
+	 *            A {@link SymbolTable} that contains the values of the variables.
 	 * @return A {@link String} representing the rendered string
 	 */
-	public String render(Map<String, Object> values) {
+	public String render(SymbolTable<?> values) {
 		StringBuffer s = new StringBuffer();
 		while (matcher.find()) {
 			String key = matcher.group(1);
-			matcher.appendReplacement(s, String.valueOf(values.get(key)));
+			matcher.appendReplacement(s, String.valueOf(values.getSymbol(key)));
 		}
 		matcher.appendTail(s);
 		return s.toString();
