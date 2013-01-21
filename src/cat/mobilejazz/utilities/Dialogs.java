@@ -1,4 +1,4 @@
-package cat.mobilejazz.utilities.ui.dialogs;
+package cat.mobilejazz.utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -1,4 +1,4 @@
-package cat.mobilejazz.utilities.protocols.json;
+package cat.mobilejazz.utilities;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
