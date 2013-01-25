@@ -5,6 +5,16 @@ import cat.mobilejazz.utilities.BuildConfig;
 import cat.mobilejazz.utilities.format.StringFormatter;
 
 public class Debug {
+	
+	private static boolean disableLogOutputInReleaseMode = true;
+	
+	public static void enableLogOutputInReleaseMode() {
+		disableLogOutputInReleaseMode = false;
+	}
+	
+	private static boolean shouldLog() {
+		return BuildConfig.DEBUG || !disableLogOutputInReleaseMode;
+	}
 
 	private static boolean internalMethod(StackTraceElement e) {
 		return e.getClassName().startsWith("dalvik.") || e.getClassName().startsWith("java.lang.")
@@ -40,37 +50,37 @@ public class Debug {
 	}
 
 	public static void debug(String message) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.d(getDefaultTag(), message);
 		}
 	}
 
 	public static void verbose(String message) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.v(getDefaultTag(), message);
 		}
 	}
 
 	public static void info(String message) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.i(getDefaultTag(), message);
 		}
 	}
 
 	public static void warning(String message) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.w(getDefaultTag(), message);
 		}
 	}
 
 	public static void error(String message) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.e(getDefaultTag(), message);
 		}
 	}
 
 	public static void logException(Throwable e) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			e.printStackTrace();
 
 			String message = e.getLocalizedMessage();
@@ -85,7 +95,7 @@ public class Debug {
 	}
 
 	public static void logMethodVerbose(Object... params) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.v("KDebug", "logMethodVerbose");
 			StackTraceElement currentMethod = getCurrentMethod();
 			try {
