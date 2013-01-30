@@ -1,19 +1,20 @@
 package cat.mobilejazz.utilities.debug;
 
+import android.text.TextUtils;
 import android.util.Log;
 import cat.mobilejazz.utilities.BuildConfig;
 import cat.mobilejazz.utilities.format.StringFormatter;
 
 public class Debug {
-	
+
 	private static boolean disableLogOutputInReleaseMode = true;
-	
+
 	public static void enableLogOutputInReleaseMode() {
 		disableLogOutputInReleaseMode = false;
 	}
-	
+
 	private static boolean shouldLog() {
-		return BuildConfig.DEBUG || !disableLogOutputInReleaseMode;
+		return !disableLogOutputInReleaseMode || BuildConfig.DEBUG;
 	}
 
 	private static boolean internalMethod(StackTraceElement e) {
@@ -51,30 +52,45 @@ public class Debug {
 
 	public static void debug(String message) {
 		if (shouldLog()) {
+			if (TextUtils.isEmpty(message)) {
+				message = "<NO_MESSAGE>";
+			}
 			Log.d(getDefaultTag(), message);
 		}
 	}
 
 	public static void verbose(String message) {
 		if (shouldLog()) {
+			if (TextUtils.isEmpty(message)) {
+				message = "<NO_MESSAGE>";
+			}
 			Log.v(getDefaultTag(), message);
 		}
 	}
 
 	public static void info(String message) {
 		if (shouldLog()) {
+			if (TextUtils.isEmpty(message)) {
+				message = "<NO_MESSAGE>";
+			}
 			Log.i(getDefaultTag(), message);
 		}
 	}
 
 	public static void warning(String message) {
 		if (shouldLog()) {
+			if (TextUtils.isEmpty(message)) {
+				message = "<NO_MESSAGE>";
+			}
 			Log.w(getDefaultTag(), message);
 		}
 	}
 
 	public static void error(String message) {
 		if (shouldLog()) {
+			if (TextUtils.isEmpty(message)) {
+				message = "<NO_MESSAGE>";
+			}
 			Log.e(getDefaultTag(), message);
 		}
 	}
