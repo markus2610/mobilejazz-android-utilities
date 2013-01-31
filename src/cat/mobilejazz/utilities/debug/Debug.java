@@ -38,7 +38,13 @@ public class Debug {
 
 	public static String getClassTag() {
 		String className = getCurrentClassName();
-		return className.substring(className.lastIndexOf('.') + 1);
+		String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+		int innerClassIndex = simpleClassName.indexOf('$');
+		if (innerClassIndex >= 0) {
+			return simpleClassName.substring(0, innerClassIndex);
+		} else {
+			return simpleClassName;
+		}
 	}
 
 	public static String getClassMethodTag(String delim) {
