@@ -56,49 +56,37 @@ public class Debug {
 		return getClassTag();
 	}
 
-	public static void debug(String message) {
+	public static void log(int priority, String message, Object... args) {
 		if (shouldLog()) {
 			if (TextUtils.isEmpty(message)) {
 				message = "<NO_MESSAGE>";
 			}
-			Log.d(getDefaultTag(), message);
+			if (args.length > 0) {
+				Log.println(priority, getDefaultTag(), String.format(message, args));
+			} else {
+				Log.println(priority, getDefaultTag(), message);
+			}
 		}
 	}
 
-	public static void verbose(String message) {
-		if (shouldLog()) {
-			if (TextUtils.isEmpty(message)) {
-				message = "<NO_MESSAGE>";
-			}
-			Log.v(getDefaultTag(), message);
-		}
+	public static void debug(String message, Object... args) {
+		log(Log.DEBUG, message, args);
 	}
 
-	public static void info(String message) {
-		if (shouldLog()) {
-			if (TextUtils.isEmpty(message)) {
-				message = "<NO_MESSAGE>";
-			}
-			Log.i(getDefaultTag(), message);
-		}
+	public static void verbose(String message, Object... args) {
+		log(Log.VERBOSE, message, args);
 	}
 
-	public static void warning(String message) {
-		if (shouldLog()) {
-			if (TextUtils.isEmpty(message)) {
-				message = "<NO_MESSAGE>";
-			}
-			Log.w(getDefaultTag(), message);
-		}
+	public static void info(String message, Object... args) {
+		log(Log.INFO, message, args);
 	}
 
-	public static void error(String message) {
-		if (shouldLog()) {
-			if (TextUtils.isEmpty(message)) {
-				message = "<NO_MESSAGE>";
-			}
-			Log.e(getDefaultTag(), message);
-		}
+	public static void warning(String message, Object... args) {
+		log(Log.WARN, message, args);
+	}
+
+	public static void error(String message, Object... args) {
+		log(Log.ERROR, message, args);
 	}
 
 	public static void logException(Throwable e) {
