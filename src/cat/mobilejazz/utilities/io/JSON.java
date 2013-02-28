@@ -8,6 +8,14 @@ import org.json.JSONObject;
 
 public class JSON {
 
+	public static String getString(JSONObject obj, String key) throws JSONException {
+		if (obj.isNull(key)) {
+			return null;
+		} else {
+			return obj.getString(key);
+		}
+	}
+
 	public static long getLong(JSONObject obj, String key) throws JSONException {
 		if (obj.isNull(key)) {
 			return 0L;
