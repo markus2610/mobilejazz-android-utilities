@@ -10,13 +10,6 @@ import android.support.v4.app.FragmentActivity;
 
 public class Dialogs {
 
-	private static OnCancelListener IGNORE_CANCEL = new OnCancelListener() {
-
-		@Override
-		public void onCancel(DialogInterface dialog) {
-		}
-	};
-
 	public static void showErrorDialogAndFinish(final Activity context, int titleResId, int messageResId,
 			int buttonLabelResId) {
 		new AlertDialog.Builder(context).setMessage(messageResId).setTitle(titleResId)
@@ -35,10 +28,15 @@ public class Dialogs {
 				.setPositiveButton(buttonLabelResId, new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
+						context.getSupportFragmentManager().popBackStack();
+						dialog.dismiss();
+					}
+				}).setOnCancelListener(new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
 						context.getSupportFragmentManager().popBackStack();
 					}
-				}).setOnCancelListener(IGNORE_CANCEL).create().show();
+				}).create().show();
 	}
 
 	public static void showErrorDialog(Context context, int titleResId, int messageResId, int buttonLabelResId) {
