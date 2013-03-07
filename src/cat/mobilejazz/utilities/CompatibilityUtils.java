@@ -1,8 +1,13 @@
 package cat.mobilejazz.utilities;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
@@ -32,6 +37,38 @@ public class CompatibilityUtils {
 		} else {
 			view.setBackgroundDrawable(drawable);
 		}
+	}
+
+	/**
+	 * In earlier versions of android, AsyncTasks where run on different threads
+	 * by employing a {@link ThreadPoolExecutor}. However, in more recent
+	 * versions, they all use only one single thread. If this behavior is not
+	 * desired, a new method
+	 * {@link AsyncTask#executeOnExecutor(Executor, Object...)} was introduced.
+	 * However, this method is only available since honeycomb. This helper
+	 * method mitigates this change in the framework. For older versions it just
+	 * ignores the executor parameter.
+	 * 
+	 * @param task
+	 *            An {@link AsyncTask}
+	 * @param executor
+	 *            The executor which should host the task.
+	 * @param args
+	 *            Optional arguments to be passed to the task.
+	 */
+	@SuppressLint("NewApi")
+	public static <Params, Progress, Result> void executeOnExecutor(AsyncTask<Params, Progress, Result> task,
+			Executor executor, Params... args) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			task.executeOnExecutor(executor, args);
+		} else {
+			task.execute(args);
+		}
+	}
+
+	public static <Params, Progress, Result> void executeParallel(AsyncTask<Params, Progress, Result> task,
+			Params... args) {
+		executeOnExecutor(task, AsyncTask.THREAD_POOL_EXECUTOR, args);
 	}
 
 }
