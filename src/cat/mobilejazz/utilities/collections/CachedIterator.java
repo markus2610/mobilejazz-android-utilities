@@ -14,7 +14,7 @@ public class CachedIterator<E> implements Pointer<E> {
 
 	public CachedIterator(Iterator<E> iterator, E noDataElement) {
 		this.iterator = iterator;
-
+		this.noDataElement = noDataElement;
 		moveToNext();
 	}
 
@@ -32,6 +32,12 @@ public class CachedIterator<E> implements Pointer<E> {
 
 	public E getValue() {
 		return value;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("CachedIterator: value = %s; noDataElement = %s; hasNext = %b; isAfterLast = %b", value,
+				noDataElement, iterator.hasNext(), isAfterLast());
 	}
 
 }
