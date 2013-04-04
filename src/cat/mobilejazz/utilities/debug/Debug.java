@@ -1,10 +1,21 @@
 package cat.mobilejazz.utilities.debug;
 
+import android.text.TextUtils;
 import android.util.Log;
 import cat.mobilejazz.utilities.BuildConfig;
 import cat.mobilejazz.utilities.format.StringFormatter;
 
 public class Debug {
+
+	private static boolean disableLogOutputInReleaseMode = true;
+
+	public static void enableLogOutputInReleaseMode() {
+		disableLogOutputInReleaseMode = false;
+	}
+
+	private static boolean shouldLog() {
+		return !disableLogOutputInReleaseMode || BuildConfig.DEBUG;
+	}
 
 	private static boolean internalMethod(StackTraceElement e) {
 		return e.getClassName().startsWith("dalvik.") || e.getClassName().startsWith("java.lang.")
@@ -27,7 +38,13 @@ public class Debug {
 
 	public static String getClassTag() {
 		String className = getCurrentClassName();
-		return className.substring(className.lastIndexOf('.') + 1);
+		String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+		int innerClassIndex = simpleClassName.indexOf('$');
+		if (innerClassIndex >= 0) {
+			return simpleClassName.substring(0, innerClassIndex);
+		} else {
+			return simpleClassName;
+		}
 	}
 
 	public static String getClassMethodTag(String delim) {
@@ -39,38 +56,41 @@ public class Debug {
 		return getClassTag();
 	}
 
-	public static void debug(String message) {
-		if (BuildConfig.DEBUG) {
-			Log.d(getDefaultTag(), message);
+	public static void log(int priority, String message, Object... args) {
+		if (shouldLog()) {
+			if (TextUtils.isEmpty(message)) {
+				message = "<NO_MESSAGE>";
+			}
+			if (args.length > 0) {
+				Log.println(priority, getDefaultTag(), String.format(message, args));
+			} else {
+				Log.println(priority, getDefaultTag(), message);
+			}
 		}
 	}
 
-	public static void verbose(String message) {
-		if (BuildConfig.DEBUG) {
-			Log.v(getDefaultTag(), message);
-		}
+	public static void debug(String message, Object... args) {
+		log(Log.DEBUG, message, args);
 	}
 
-	public static void info(String message) {
-		if (BuildConfig.DEBUG) {
-			Log.i(getDefaultTag(), message);
-		}
+	public static void verbose(String message, Object... args) {
+		log(Log.VERBOSE, message, args);
 	}
 
-	public static void warning(String message) {
-		if (BuildConfig.DEBUG) {
-			Log.w(getDefaultTag(), message);
-		}
+	public static void info(String message, Object... args) {
+		log(Log.INFO, message, args);
 	}
 
-	public static void error(String message) {
-		if (BuildConfig.DEBUG) {
-			Log.e(getDefaultTag(), message);
-		}
+	public static void warning(String message, Object... args) {
+		log(Log.WARN, message, args);
+	}
+
+	public static void error(String message, Object... args) {
+		log(Log.ERROR, message, args);
 	}
 
 	public static void logException(Throwable e) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			e.printStackTrace();
 
 			String message = e.getLocalizedMessage();
@@ -85,7 +105,7 @@ public class Debug {
 	}
 
 	public static void logMethodVerbose(Object... params) {
-		if (BuildConfig.DEBUG) {
+		if (shouldLog()) {
 			Log.v("KDebug", "logMethodVerbose");
 			StackTraceElement currentMethod = getCurrentMethod();
 			try {

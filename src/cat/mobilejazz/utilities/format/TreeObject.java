@@ -1,4 +1,4 @@
-package cat.mobilejazz.utilities.debug;
+package cat.mobilejazz.utilities.format;
 
 public interface TreeObject {
 	
