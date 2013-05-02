@@ -6,6 +6,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteTransactionListener;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -72,6 +74,22 @@ public class CompatibilityUtils {
 			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, args);
 		} else {
 			task.execute(args);
+		}
+	}
+
+	public static void beginTransactionNonExclusive(SQLiteDatabase db) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			db.beginTransactionNonExclusive();
+		} else {
+			db.beginTransaction();
+		}
+	}
+	
+	public static void beginTransactionNonExclusive(SQLiteDatabase db, SQLiteTransactionListener transactionListener) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			db.beginTransactionWithListenerNonExclusive(transactionListener);
+		} else {
+			db.beginTransactionWithListener(transactionListener);
 		}
 	}
 
