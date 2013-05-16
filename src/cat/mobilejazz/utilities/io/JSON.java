@@ -36,7 +36,7 @@ public class JSON {
 		if (obj.isNull(key)) {
 			return null;
 		} else {
-			return DateUtils.parseTimestamp(obj.getString(key));
+			return DateUtils.get().parseTimestamp(obj.getString(key));
 		}
 	}
 
