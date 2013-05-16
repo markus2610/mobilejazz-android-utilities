@@ -21,13 +21,13 @@ public class DateUtils {
 		return instance.get();
 	}
  	
-	private SimpleDateFormat iso8601FormatUTC = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+	private SimpleDateFormat iso8601FormatUTC = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
-	private SimpleDateFormat sqlFormatUTC = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+	private SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 	public DateUtils() {
 		iso8601FormatUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
-		sqlFormatUTC.setTimeZone(TimeZone.getTimeZone("UTC"));
+		sqlFormat.setTimeZone(TimeZone.getDefault());
 	}
 
 	public Date parseTimestamp(String dateString) throws ParseException {
@@ -40,7 +40,7 @@ public class DateUtils {
 
 	public Date parseDate(String dateString) throws ParseException {
 		if (!TextUtils.isEmpty(dateString)) {
-			return sqlFormatUTC.parse(dateString);
+			return sqlFormat.parse(dateString);
 		} else {
 			return null;
 		}
@@ -55,7 +55,7 @@ public class DateUtils {
 
 	public String formatDate(Date date) {
 		if (date != null)
-			return sqlFormatUTC.format(date);
+			return sqlFormat.format(date);
 		else
 			return null;
 	}
