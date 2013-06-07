@@ -41,11 +41,19 @@ public class AsyncDialogFragment extends DialogFragment {
 
 	@SuppressWarnings("unchecked")
 	private <D extends AsyncDialogFragment> void attach() {
-		PersistentAsyncTask<?, ?, ?, D> task = (PersistentAsyncTask<?, ?, ?, D>) PersistentAsyncTask
-				.getTask(mTaskIndex);
+		PersistentAsyncTask<D> task = getTask();
 		if (task != null) {
 			task.attachDialog((D) this);
 		}
+	}
+
+	protected void finish() {
+		dismiss();
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <D extends AsyncDialogFragment> PersistentAsyncTask<D> getTask() {
+		return (PersistentAsyncTask<D>) PersistentAsyncTask.getTask(mTaskIndex);
 	}
 
 }

@@ -16,24 +16,21 @@ import android.util.SparseArray;
  * @author Hannes Widmoser
  * 
  */
-public abstract class PersistentAsyncTask<Params, Progress, Result, D extends AsyncDialogFragment> extends
-		AsyncTask<Params, Progress, Result> {
+public abstract class PersistentAsyncTask<D extends AsyncDialogFragment> extends AsyncTask<Void, Integer, Exception> {
 
 	private static int sCurrentIndex = 0;
-	private static SparseArray<PersistentAsyncTask<?, ?, ?, ?>> sTasks = new SparseArray<PersistentAsyncTask<?, ?, ?, ?>>();
+	private static SparseArray<PersistentAsyncTask<? extends AsyncDialogFragment>> sTasks = new SparseArray<PersistentAsyncTask<? extends AsyncDialogFragment>>();
 
 	private static int getNextIndex() {
 		return sCurrentIndex++;
 	}
 
-	static PersistentAsyncTask<?, ?, ?, ?> getTask(int index) {
+	static PersistentAsyncTask<? extends AsyncDialogFragment> getTask(int index) {
 		return sTasks.get(index);
 	}
 
 	private D mFragment;
 	private int mIndex;
-
-	private FragmentManager mFragmentManager;
 
 	void attachDialog(D fragment) {
 		mFragment = fragment;
@@ -69,32 +66,51 @@ public abstract class PersistentAsyncTask<Params, Progress, Result, D extends As
 	public PersistentAsyncTask() {
 	}
 
-	public PersistentAsyncTask(D dialog, FragmentManager fragmentManager) {
-		mFragment = dialog;
-		if (mFragment.getArguments() == null) {
-			mFragment.setArguments(new Bundle());
+	/**
+	 * Shows the given dialog and associates it with this task. If
+	 * {@code executeImmediately} is set to {@code true} the task is immediately
+	 * executed. If not, executing the task is up to the dialog (e.g. depending
+	 * on whether the user pressed the positive or the negative button.
+	 * 
+	 * @param dialog
+	 *            The dialog that is to be shown.
+	 * @param fragmentManager
+	 *            A {@link FragmentManager}.
+	 * @param executeImmediately
+	 *            A boolean flag to indicate whether to immediately execute the
+	 *            task.
+	 * @param params
+	 *            Optional params to pass to {@link #execute(Object...)}
+	 */
+	public void start(D dialog, FragmentManager fragmentManager, String tag, boolean executeImmediately) {
+		if (dialog != null && fragmentManager != null) {
+			mIndex = getNextIndex();
+			sTasks.put(mIndex, this);
+
+			mFragment = dialog;
+			if (mFragment.getArguments() == null) {
+				mFragment.setArguments(new Bundle());
+			}
+			if (mFragment != null) {
+				mFragment.getArguments().putInt(AsyncDialogFragment.KEY_TASK_INDEX, mIndex);
+				if (tag == null) {
+					tag = "cat.mobilejazz.utilities.concurrency.PersistentAsyncTask-" + mIndex;
+				}
+				mFragment.show(fragmentManager, tag);
+			}
 		}
-		mFragmentManager = fragmentManager;
+		if (executeImmediately) {
+			execute();
+		}
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		mIndex = getNextIndex();
-		sTasks.put(mIndex, this);
-
-		if (mFragment != null) {
-			mFragment.getArguments().putInt(AsyncDialogFragment.KEY_TASK_INDEX, mIndex);
-			mFragment.show(mFragmentManager, "cat.mobilejazz.utilities.concurrency.PersistentAsyncTask-" + mIndex);
-		}
-
-		// release as soon as possible:
-		mFragmentManager = null;
 	}
 
 	private void release() {
 		sTasks.remove(mIndex);
-		mFragmentManager = null;
 		mFragment = null;
 	}
 
@@ -105,10 +121,10 @@ public abstract class PersistentAsyncTask<Params, Progress, Result, D extends As
 	}
 
 	@Override
-	protected void onPostExecute(Result result) {
+	protected void onPostExecute(Exception result) {
 		super.onPostExecute(result);
 		if (mFragment != null)
-			mFragment.dismiss();
+			mFragment.finish();
 		release();
 	}
 
