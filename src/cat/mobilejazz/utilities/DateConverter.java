@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.compatibility.gson.JsonDeserializationContext;
+import com.google.compatibility.gson.JsonDeserializer;
+import com.google.compatibility.gson.JsonElement;
+import com.google.compatibility.gson.JsonParseException;
+import com.google.compatibility.gson.JsonPrimitive;
+import com.google.compatibility.gson.JsonSerializationContext;
+import com.google.compatibility.gson.JsonSerializer;
 
 public class DateConverter implements JsonSerializer<Date>,
 		JsonDeserializer<Date> {
