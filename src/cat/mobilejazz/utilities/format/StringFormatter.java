@@ -105,4 +105,16 @@ public class StringFormatter {
 		return printIterable(new StringBuilder(), array);
 	}
 
+	/**
+	 * Only upper cases the first letter of {@code in}
+	 * 
+	 * @param in
+	 * @return
+	 */
+	public static CharSequence toUpperCase(CharSequence in) {
+		StringBuilder b = new StringBuilder(in);
+		b.setCharAt(0, Character.toUpperCase(in.charAt(0)));
+		return b;
+	}
+
 }
