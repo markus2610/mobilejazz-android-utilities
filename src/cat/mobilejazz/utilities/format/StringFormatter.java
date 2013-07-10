@@ -1,6 +1,9 @@
 package cat.mobilejazz.utilities.format;
 
+import java.nio.ByteBuffer;
 import java.util.Iterator;
+
+import android.util.Base64;
 
 public class StringFormatter {
 
@@ -115,6 +118,12 @@ public class StringFormatter {
 		StringBuilder b = new StringBuilder(in);
 		b.setCharAt(0, Character.toUpperCase(in.charAt(0)));
 		return b;
+	}
+	
+	public static CharSequence compactIdentityHashCode(Object o) {
+		final int id = System.identityHashCode(o);
+		final byte[] bytes = ByteBuffer.allocate(4).putInt(id).array();
+		return Base64.encodeToString(bytes, Base64.NO_PADDING | Base64.NO_WRAP);
 	}
 
 }
