@@ -22,14 +22,26 @@ public class Debug {
 				|| e.getClassName().startsWith(Debug.class.getName());
 	}
 
-	protected static StackTraceElement getCurrentMethod() {
+	protected static int getCurrentStackTraceElementIndex() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 
 		int i = 0;
 		while (internalMethod(stackTrace[i]) && i < stackTrace.length)
 			++i;
-
-		return stackTrace[i];
+		
+		return i-1;
+	}
+	
+	public static StackTraceElement getCurrentMethod() {
+		return getCallingMethod(0);
+	}
+	
+	public static StackTraceElement getParentMethod() {
+		return getCallingMethod(1);
+	}
+	
+	public static StackTraceElement getCallingMethod(int depth) {
+		return Thread.currentThread().getStackTrace()[getCurrentStackTraceElementIndex() + depth];
 	}
 
 	public static String getCurrentClassName() {
