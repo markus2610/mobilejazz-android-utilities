@@ -59,4 +59,16 @@ public class Dialogs {
 				}).create().show();
 	}
 
+	public static void showErrorDialog(Activity context, int titleResId, int messageResId, int buttonLabelResId) {
+		if (!context.isFinishing()) {
+			showErrorDialog((Context)context, titleResId, messageResId, buttonLabelResId);
+		}
+	}
+
+	public static void showErrorDialog(Activity context, int titleResId, String message, int buttonLabelResId) {
+		if (!context.isFinishing()) {
+			showErrorDialog((Context)context, titleResId, message, buttonLabelResId);
+		}
+	}
+
 }
