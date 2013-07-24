@@ -48,7 +48,7 @@ public class AsyncDialogFragment extends DialogFragment {
 	}
 
 	protected void finish() {
-		dismiss();
+		dismissAllowingStateLoss();
 	}
 
 	@SuppressWarnings("unchecked")
