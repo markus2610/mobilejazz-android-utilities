@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 
+import android.webkit.MimeTypeMap;
+
 /**
  * Provides static convenience methods to handle {@link InputStream}s and
  * {@link Reader}s.
@@ -124,6 +126,19 @@ public class IOUtils {
 
 	public static void copy(InputStream from, OutputStream to) throws IOException {
 		copy(from, to, 1024);
+	}
+
+	/**
+	 * Gets the mime type of a given uri by inspecting it's file name.
+	 * 
+	 * @param uri
+	 *            A uri that must end in a filename
+	 * @return A mime type for the file name's extension or {@code null} if
+	 *         there is no such mapping
+	 */
+	public static String getMimeType(String uri) {
+		String extension = MimeTypeMap.getFileExtensionFromUrl(uri);
+		return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 	}
 
 }
